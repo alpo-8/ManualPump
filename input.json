@@ -1,0 +1,27 @@
+{
+  "mtSettingsService": "http://mt-settings-service.mt.svc.cluster.local",
+  "mtTradingCore": "http://mt-trading-core.mt.svc.cluster.local",
+  "rabbitMq":
+  {
+    "connString": "amqp://margintrading:margintrading@rabbit-mt.mt.svc.cluster.local:5672",
+    "orderBooksExchange": "lykke.exchangeconnector.orderbooks",
+    "fxRatesExchange": "lykke.stpexchangeconnector.fxRates"
+  },
+  "books": {
+    "sourceName": "StarWarrant",
+    "depth": 10,
+    "pricePrecision": 3,
+    "bestPriceDeviation": 0.025
+  },
+  "publishingRate": 
+  {
+    "initial": 1,
+    "target": 5
+  },
+  "defaults": 
+  {
+    "bid": 5.7,
+    "ask": 6.4
+  },
+  "instrumentRegex": "OIL"
+}
