@@ -8,7 +8,7 @@ namespace ManualPump
         public Books books { get; set; }
         public PubRate publishingRate { get; set; }
         public DefaultQuote defaults { get; set; }
-        public string instrumentRegex { get; set; }
+        public string? instrumentRegex { get; set; }
     }
     
     public abstract class RabbitMq
