@@ -16,6 +16,7 @@
   "publishingRate": 
   {
     "initial": 1,
+    "increment": 0.1,
     "target": 5
   },
   "defaults": 

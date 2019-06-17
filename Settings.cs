@@ -1,6 +1,6 @@
 namespace ManualPump
 {
-    public abstract class Settings
+    public sealed class Settings
     {
         public string mtSettingsService { get; set; }
         public string mtTradingCore { get; set; }
@@ -11,14 +11,14 @@ namespace ManualPump
         public string? instrumentRegex { get; set; }
     }
     
-    public abstract class RabbitMq
+    public sealed class RabbitMq
     {
         public string connString { get; set; }
         public string orderBooksExchange { get; set; }
         public string fxRatesExchange { get; set; }
     }
 
-    public abstract class Books
+    public sealed class Books
     {
         public string sourceName { get; set; }
         public int depth { get; set; }
@@ -26,13 +26,14 @@ namespace ManualPump
         public decimal bestPriceDeviation { get; set; }
     }
     
-    public abstract class PubRate
+    public sealed class PubRate
     {
-        public int initial { get; set; }
-        public int target { get; set; }
+        public decimal initial { get; set; }
+        public decimal increment { get; set; }
+        public decimal target { get; set; }
     }
     
-    public abstract class DefaultQuote
+    public sealed class DefaultQuote
     {
         public decimal bid { get; set; }
         public decimal ask { get; set; }

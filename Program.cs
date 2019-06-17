@@ -85,12 +85,12 @@ namespace ManualPump
             if (quotes.Count.Equals(0)) return;
             
             var cycleCount = 0;
-            var ramp = 0m;
+            var ramp = Settings.publishingRate.initial;
             while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter))
             {
                 var sw = Stopwatch.StartNew();
                 var target = Stopwatch.Frequency / (ramp
-                                 += 0.1m * Settings.publishingRate.initial *
+                                 += Settings.publishingRate.increment *
                                     (Min(Settings.publishingRate.target, ++cycleCount) <= Floor(ramp)
                                         ? 0
                                         : cycleCount = 1));

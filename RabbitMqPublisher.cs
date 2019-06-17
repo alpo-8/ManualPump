@@ -37,7 +37,7 @@ namespace ManualPump
         public static void Publish(string exchange, Orderbook message, string routingKey = null)
             => Channel(TheRandom.Pair(Dimension))
                 .BasicPublish(
-                    exchange: exchange,
+                    exchange,
                     body: Serialize(message),
                     routingKey: routingKey ?? string.Empty,
                     mandatory: false,

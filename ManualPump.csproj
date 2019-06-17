@@ -2,9 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
         <Authors>alpo8</Authors>
         <LangVersion>preview</LangVersion>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
