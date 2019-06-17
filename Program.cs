@@ -16,7 +16,7 @@ namespace ManualPump
     {
         public static Settings Settings;
 
-        private static void Log(string rec) => Console.WriteLine($"[ {DateTime.UtcNow.ToString()} ] : {rec}");
+        private static void Log(string rec) => Console.WriteLine($"[ {DateTime.UtcNow.ToString("O")} ] : {rec}");
         
         public static void Main(string[] args)
         {
