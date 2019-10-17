@@ -15,7 +15,7 @@ namespace ManualPump
     {
         public string connString { get; set; }
         public string orderBooksExchange { get; set; }
-        public string fxRatesExchange { get; set; }
+        public string? fxRatesExchange { get; set; }
     }
 
     public sealed class Books

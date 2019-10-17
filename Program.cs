@@ -16,12 +16,19 @@ namespace ManualPump
     {
         public static Settings Settings;
 
-        private static void Log(string rec) => Console.WriteLine($"[ {DateTime.UtcNow.ToString("O")} ] : {rec}");
+        private static void Log(string rec) 
+            => Console.WriteLine($"[ {DateTime.UtcNow:O} ] : {rec}");
         
         public static void Main(string[] args)
         {
             Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(@"./input.json"));
             RabbitMqPublisher.ConnectionString = new Uri(Settings.rabbitMq.connString.AppendPathSegment("%2f"));
+
+            var headers = new
+            {
+                api_key = "margintrading",
+                Content_Type = "application/json"
+            };
             
             if (!string.IsNullOrEmpty(Settings.rabbitMq.fxRatesExchange))
             {
@@ -29,15 +36,13 @@ namespace ManualPump
                 
                 var pairs = Settings.mtSettingsService
                     .AppendPathSegment("api/assetPairs")
-                    .WithHeader("api-key", "margintrading")
-                    .WithHeader("Accept", "application/json")
+                    .WithHeaders(headers)
                     .GetJsonListAsync().Result
                     .Select(x => (string) x.Id).OrderBy(x => x).ToArray();
                 
                 var oldFx = Settings.mtTradingCore
                     .AppendPathSegment("api/prices/bestFx")
-                    .WithHeader("api-key", "margintrading")
-                    .WithHeader("Content-Type", "application/json")
+                    .WithHeaders(headers)
                     .PostJsonAsync(new { pairs }).ReceiveJson<Dictionary<string, dynamic>>().Result;
                 
                 var fxRates = pairs.Select(i => (id: i,
@@ -60,8 +65,7 @@ namespace ManualPump
             
             var instruments = Settings.mtSettingsService
                 .AppendPathSegment("api/tradingInstruments")
-                .WithHeader("api-key", "margintrading")
-                .WithHeader("Accept", "application/json")
+                .WithHeaders(headers)
                 .GetJsonListAsync().Result
                 .Select(x => (string) x.Instrument).OrderBy(x => x).ToArray();
             Log($"Trading instruments discovered: {instruments.Length}");
@@ -71,8 +75,7 @@ namespace ManualPump
             
             var oldQuotes = Settings.mtTradingCore
                 .AppendPathSegment("api/prices/best")
-                .WithHeader("api-key", "margintrading")
-                .WithHeader("Content-Type", "application/json")
+                .WithHeaders(headers)
                 .PostJsonAsync(new { instruments }).ReceiveJson<Dictionary<string, dynamic>>().Result;
             Log($"Trading quote history exists for {oldQuotes.Count} pairs");
             
@@ -92,8 +95,7 @@ namespace ManualPump
                 var target = Stopwatch.Frequency / (ramp
                                  += Settings.publishingRate.increment *
                                     (Min(Settings.publishingRate.target, ++cycleCount) <= Floor(ramp)
-                                        ? 0
-                                        : cycleCount = 1));
+                                        ? 0 : cycleCount = 1));
                 
                 Log($"Current publishing rate: {ramp}");
                 for (var i = 0; i < quotes.Count; sw.Blink(target * i++ / quotes.Count))
